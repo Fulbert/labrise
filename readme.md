@@ -8,7 +8,7 @@ Labrise is a website providing social tools for by paragliders, hang gliders and
 
 On Debian-based distribution, run next commands:
 
-#TODO
+//TODO
 ```bash
 sudo apt-get install python3 python3-dev
 wget pip
@@ -25,7 +25,7 @@ python manage.py migrate
 
 On Debian-based distribution, run next commands:
 
-#TODO
+//TODO
 ```bash
 python manage.py runserver <ipadress>:<port>
 ```
