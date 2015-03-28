@@ -41,7 +41,8 @@ INSTALLED_APPS = (
     'flightlog',
     'gallery',
     'gears',
-    'space'
+    'space',
+    'page',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -69,9 +70,10 @@ DATABASES = {
     }
 }
 
+# //TODO
 # Backend to use for Geometry Models
 # https://docs.djangoproject.com/en/1.7/ref/contrib/gis/db-api/
-GEOMETRY_BACKEND = 'django.contrib.gis.db.backends.spatialite'
+# GEOMETRY_BACKEND = 'django.contrib.gis.db.backends.spatialite'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
@@ -89,5 +91,5 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
-
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR,STATIC_URL)
