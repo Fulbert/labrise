@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb_base %}
+  <li class="active">Login or Register</li>
+{% endblock %}
+
+{% block content %}
+  <form action="{% url "util.views.login" %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input class="btn btn-default" type="submit" value="Login!">
+  </form>
+{% endblock %}

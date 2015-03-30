@@ -1,0 +1,121 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="<!-- //TODO -->">
+
+    <title>Labri.se ~</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'css/bootstrap.min.css'%}" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body role="document">
+
+    {% block navbar %}
+      <!-- navbar -->
+      <nav class="navbar navbar-inverse">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url 'page.views.home' %}">Labri.se ~</a>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li><a href="{% url 'flightlog.views.home' %}">Next flights ?</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Talk about... <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">... Paragling</a></li>
+                  <li><a href="#">... Hang gliding</a></li>
+                  <li><a href="#">... Kite</a></li>
+                  <li class="divider"></li>
+                  <li><a href="#">... Forecast</a></li>
+                </ul>
+              </li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Account <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                  {% if user.is_authenticated %}
+                    <li role="presentation" class="dropdown-header">Manage</li>
+                    <li><a href="">Wings</a></li>
+                    <li><a href="">Groups</a></li>
+                    <li><a href="">Friends</a></li>
+                    <li class="divider"></li>
+                    <li role="presentation" class="dropdown-header">Edit</li>
+                    <li><a href="">Notifications</a></li>
+                    <li><a href="">Profile</a></li>
+                    <li><a href="">Settings</a></li>
+                  {% else %}
+                    <li>
+                      <form action="{% url 'util.views.login' %}">
+                        <input type="text" name="username"><br>
+                        <input type="password" name="password">
+                        <input class="btn btn-default" type="submit" value="Let's fly!">
+                      </form>
+                    </li>
+                    <li class="divider"></li>
+                    <li><a href="{% url 'util.views.login' %}">Register</a></li> 
+                  {% endif %}                                 
+                </ul>
+              </li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    {% endblock %}
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+          <ol class="breadcrumb">
+            {% block breadcrumb_base %}{% endblock %}
+            {% block breadcrumb %}{% endblock %}
+          </ol>
+          <hr>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+          {% block message_error %}{% endblock %}
+          {% block message_success %}{% endblock %}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+          {% block content %}{% endblock %}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+          <hr>
+          <p class="text-center"><strong>Labri.se ~ </strong>Because.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="{% static 'javascripts/bootstrap.min.js' %}"></script>
+  </body>
+</html>

@@ -1,0 +1,13 @@
+{% extends 'flightlog/base.html' %}
+
+{% block breadcrumb %}
+  <li class="active">New trip</li>
+{% endblock %}
+
+{% block content %}
+  <form action="{% url "flightlog.views.new_trip" %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input class="btn btn-default" type="submit" value="Let's fly!">
+  </form>
+{% endblock %}
