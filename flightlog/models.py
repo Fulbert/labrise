@@ -23,3 +23,9 @@ class Track(models.Model):
 	waypoints = models.ManyToManyField('space.Point', related_name='waypoints')
 	is_GPS = models.BooleanField(default=False)
 
+class Trip(models.Model):
+	takeoff = models.ManyToManyField('space.Point', limit_choices_to={'is_takeoff': True}, related_name='takeoff_list')
+	landing = models.ManyToManyField('space.Point', limit_choices_to={'is_landing': True}, related_name='landing_list')
+	date_start = models.DateField()
+	date_end = models.DateField()
+	pilots = models.ManyToManyField('auth.User')
