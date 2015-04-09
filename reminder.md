@@ -1,10 +1,30 @@
 # Reminder
 
+## Links
+
+
 ## Launch server
 ```
+# easy way
 cd labrise/
 source ../env/bin/activate
-./manage.py runserver labri.se:8000
+sass assets/stylesheets/_bootstrap.scss assets/css/bootstrap.min.css # run only if scss has been changed
+./manage.py collectstatic                                            # run only first time OR if any static file changed
+./manage.py runserver labri.se:<port>
+
+# dev way
+cd labrise/
+screen
+	source ../env/bin/activate
+	sass assets/stylesheets/_bootstrap.scss assets/css/bootstrap.min.css # run only if scss has been changed
+	./manage.py collectstatic                                            # run only first time OR if any static file changed
+	./manage.py syndb 													 # run only first time to setup DB
+	./manage.py migrate 												 # run only if migrations needed (models edit)
+	./manage.py runserver labri.se:8000
+	Ctrl+A ... D                                                         # shortcut to go out of screen
+	screen -r                                                            # re-open screen
+
+# prod way
 ```
 
 ## View context on template
@@ -12,7 +32,12 @@ source ../env/bin/activate
 {% filter force_escape %}{% debug %}{% endfilter %}
 ```
 
-## Database 
+## Database
+
+Requirements: 
+- postgresql >= 9.4
+- postgis >= 2.1
+
 ```
 sudo su - postgres # connect to postgres UNIX user
 psql               # postgresql CLI client
