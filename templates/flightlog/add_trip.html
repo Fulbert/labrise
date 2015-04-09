@@ -1,8 +1,4 @@
-{% extends 'flightlog/base.html' %}
-
-{% block breadcrumb %}
-  <li class="active">New trip</li>
-{% endblock %}
+{% extends 'base.html' %}
 
 {% block content %}
   <form action="{% url "flightlog.views.new_trip" %}" method="post">

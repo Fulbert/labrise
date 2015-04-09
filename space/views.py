@@ -1,3 +1,8 @@
 from django.shortcuts import render
 
-# Create your views here.
+from space.models import Point
+
+def home(request):
+	points = Point.objects.all()
+	context = {'points':points}
+	return render(request, 'space/home.html', context)

@@ -31,5 +31,5 @@ echo 'migrate: run ./manage.py migrate'
 #
 # -------------
 # Launch server
-./manage.py runserver 151.80.134.115:8000
+./manage.py runserver labri.se:8000
 

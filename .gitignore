@@ -4,3 +4,5 @@ db.sqlite3
 
 *.py[co]
 /.sass-cache
+labrise.sublime-project
+labrise.sublime-workspace

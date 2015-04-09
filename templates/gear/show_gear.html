@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-12">
+      <h2>{{ gear.name }} {{ gear.size }} <small>by 
+        <strong>
+          <a href="{% url 'show_brand' gear.brand.pk %}">
+            {{ gear.brand.name }}</a>
+          </strong>
+        </small>
+      </h2>
+    </div>
+  </div>
+  <div class="row">
+
+    <div class="col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Technical Sheet</h3>
+        </div>
+        <div class="panel-body">
+          <table class="table table-condensed table-hover table-striped">
+            <tr>
+              <th>Set</th>
+              <th>Value</th>
+            </tr>
+            {% for data in gear.datas.all %}
+              <tr>
+                <td>{{ data.data_type.data_name }}</td>
+                <td>{{ data.value }}</td>
+              </tr>
+            {% endfor %}
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Pilots with <em>{{ gear.name }}</em></h3>
+        </div>
+        <div class="panel-body bg-success">
+          <ul>
+            {% for pilot in pilots %}
+              <li>
+                <a href="{% url 'show_pilot' pilot.user.pk %}">
+                  {{ pilot.user.get_username }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Stats</h3>
+        </div>
+        <div class="panel-body">
+          {% if pilot.user.is_authenticated %}
+            <button data-toggle="modal" data-target="#flight_add" type="button" class="btn btn-primary btn-block">Add a flight with {{ gear_name }}</button>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block modals %}{% endblock %}

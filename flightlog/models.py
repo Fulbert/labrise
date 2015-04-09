@@ -3,10 +3,9 @@ from django.db import models
 
 # Log Model (contain all infos related to a flight)
 class Log(models.Model):
-	pilot = models.ForeignKey('auth.User')
+	pilot = models.ForeignKey('member.Member')
 	track = models.ForeignKey('Track')
-	gallery = models.ForeignKey('gallery.Gallery')
-	wing = models.ForeignKey('gears.Wing')
+	gears = models.ManyToManyField('gear.Gear')
 
 	name = models.CharField(max_length=50)
 	takeoff_date = models.DateField()
@@ -21,6 +20,7 @@ class Track(models.Model):
 	takeoff_point = models.ForeignKey('space.Point', related_name='takeoff_point')
 	landing_point = models.ForeignKey('space.Point', related_name='landing_point')
 	waypoints = models.ManyToManyField('space.Point', related_name='waypoints')
+	track = models.ForeignKey('space.Track',null=True,blank=True)
 	is_GPS = models.BooleanField(default=False)
 
 class Trip(models.Model):
@@ -28,4 +28,4 @@ class Trip(models.Model):
 	landing = models.ManyToManyField('space.Point', limit_choices_to={'is_landing': True}, related_name='landing_list')
 	date_start = models.DateField()
 	date_end = models.DateField()
-	pilots = models.ManyToManyField('auth.User')
+	pilots = models.ManyToManyField('member.Member')

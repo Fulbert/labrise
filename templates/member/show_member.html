@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-12">
+      <h2>{{ pilot.user.get_username }}</h2>
+    </div>
+  </div>
+  <div class="row">
+
+    <div class="col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Last flights</h3>
+        </div>
+        <div class="panel-body bg-success">
+          
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">See <em>{{ pilot.user.get_username }}</em> there</h3>
+        </div>
+        <div class="panel-body bg-success">
+          <p>
+            FORM
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">{{ pilot.user.get_username }}'s gears</h3>
+        </div>
+        <div class="panel-body">
+          <ul class="list-group">
+            {% for gear in pilot.gears.all %}
+              <li class="list-group-item">
+                <span class="badge">{{ gear.gear_type }}</span>
+                <a href="{% url 'show_brand' gear.brand.pk %}">
+                  {{ gear.brand.short_name }}</a> 
+                <span class="glyphicon glyphicon-flash" aria-hidden="true"></span>
+                <a href="{% url 'show_gear' gear.pk %}">
+                  {{ gear.name }} {{ gear.size }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+          {% if request.user.is_authenticated and request.user.pk == pilot.user.pk %}
+            <button data-toggle="modal" data-target="#gear_add" type="button" class="btn btn-primary btn-block">Add more gears</button>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block modals %}
+  {% if request.user.is_authenticated and request.user.pk == pilot.user.pk %}
+    <div class="modal fade" id="gear_add" tabindex="-1" role="dialog" aria-labelledby="GearAdd" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form method="post" action="{% url 'add_gear_to_pilot' %}">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="myModalLabel">Add your gears</h4>
+            </div>
+            <div class="modal-body">
+              {% csrf_token %}
+              <select class="form-control" name="gear_pk">
+
+                {% regroup gears by gear_type as gear_type_list %}
+
+                {% for gear_type in gear_type_list %}
+                  <optgroup label="{{ gear_type.grouper }}">
+                    {% for gear in gear_type.list %}
+                      <option value="{{ gear.pk }}">{{ gear.brand.name }} {{ gear.name }} {{ gear.size }}</option>
+                    {% endfor %}
+                  </optgroup>          
+                {% endfor %}
+              </select>
+            </div>
+            <div class="modal-footer">
+              <input type="submit" class="btn btn-primary" value="Add" />
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}

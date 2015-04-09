@@ -1,35 +1,202 @@
 {% extends 'base.html' %}
 
-{% block breadcrumb_base %}
-  <li><a href="{% url 'page.views.home' %}">Home</a></li>
+{% block head_buttons %}
+<ul class="nav navbar-nav navbar-center" role="group" aria-label="...">
+  <li class="btn-group">
+   <button data-toggle="modal" data-target="#create_trip" class="btn btn-warning navbar-btn">Prepare my next trip</button>
+   <button data-toggle="modal" data-target="#add_track" class="btn btn-danger navbar-btn">Share my track</button>
+ </li>
+</ul>
 {% endblock %}
 
+<!--News-->
 {% block content %}
-  <div class="row">
-    <div class="col-md-3">
-      <p class="text-center bg-info">
-        Social tools for paragliders, hang&nbsp;gliders and&nbsp;kiters.<br>Schedule a flight, compare flight logs, share videos, create challenge are some exciting features of <strong>Labri.se ~</strong>
-      </p>
-      <hr>
-      <p>
-        <a href="{% url 'flightlog.views.new_trip' %}" role="button" class="btn btn-primary btn-block">Prepare my next trip</a>
-        <a href="{% url 'flightlog.views.new_track' %}" role="button" class="btn btn-primary btn-block">Share my track</a>
-        <a href="" role="button" class="btn btn-primary btn-block">Share a video</a>
-      </p>
+<div class="row">
+  <div class="col-md-8">
+    {% if user.is_authenticated %}
+
+    {% for new in news %}
+      <div class="well well-sm {{ new.contenttype }}">
+        
+        {% if new.contenttype = 'video' %}
+          <h4>{{ new.datas.title }} <small>{{ new.datas.desc }}</small></h4>
+          {% if new.datas.provider = 'youtube' %}
+            <iframe width="100%" height="500px" src="https://www.youtube.com/embed/{{ new.datas.provider_id }}" frameborder="0" allowfullscreen></iframe>
+          {% endif %}
+        
+        {% elif new.contenttype = 'flightlog' %}
+          <h4>Flight at {{ new.datas.take_off }} <small> by {{ new.datas.pilot.user.get_username }}</small></h4>
+          <div id="map_{{ forloop.counter }}" class="map" style="height: 500px; width: 100%"></div>
+
+        {% elif new.contenttype = 'picture' %}
+          <h4>{{ new.datas.title }} <small>{{ new.datas.desc }}</small></h4>
+          {% if new.datas.provider = 'flickr' %}
+            <img src="{{ new.datas.provider_id }}" class="img-responsive">
+          {% endif %}
+        {% endif %}
+      </div>
+    {% endfor %}
+
+    {% else %}
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><strong>Labri.se ~</strong> Enhance your experience</h3>
+      </div>
+      <div class="panel-body bg-success">
+        <p>
+          <strong>Help us to enhance your experience on Labri.se!</strong><br>
+          <small>We need you to answer a few questions to enhance <strong>your experience on Labri.se!</strong> </small>
+        </p>
+      </div>
     </div>
-    <div class="col-md-9">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">What's new?</h3>
+
+    {% endif %}
+    
+  </div>
+
+  <!--Filters-->
+  <div class="col-md-4">
+    <div class="list-group">
+      <a href="#" class="list-group-item list-group-item-info">
+        <div class="row">
+          <div class="col-md-1">
+          </div>
+          <div class="col-md-11">
+            <h4 class="list-group-item-heading">For you with love</h4>
+            <p class="list-group-item-text">Fresh news, just for you!</p>
+          </div>
         </div>
-        <div class="panel-body">
-          <ul>
-        {% for user in latest_users %}
-          <li>{{ user.first_name }}</li>
-        {% endfor %}
-      </ul>
+      </a>
+      <a class="list-group-item list-group-item-success btn"  type="button" data-toggle="collapse" href="#filters" aria-expanded="true" aria-controls="filters">
+        <div class="row">
+          <div class="col-md-1">
+          </div>
+          <div class="col-md-11 text-left" >
+            <h4 class="list-group-item-heading">Filters</h4>
+            <p class="list-group-item-text">Make your choice!</p>
+          </div>
         </div>
+      </a>
+      <div class="collapse" id="filters">
+        <a href="#" class="list-group-item list-group-item-success trigger-show-hide" data-show-hide="flightlog">
+          <div class="row">
+            <div class="col-md-2">
+              <span class="glyphicon glyphicon-fire"></span>
+            </div>
+            <div class="col-md-10">
+              Last flights
+            </div>
+          </div>
+        </a>
+        <a href="#" class="list-group-item list-group-item-success trigger-show-hide" data-show-hide="video">
+          <div class="row">
+            <div class="col-md-2">
+              <span class="glyphicon glyphicon-facetime-video"></span>
+            </div>
+            <div class="col-md-10">
+              Videos
+            </div>
+          </div>
+        </a>
+        <a href="#" class="list-group-item list-group-item-success trigger-show-hide" data-show-hide="picture">
+          <div class="row">
+            <div class="col-md-2">
+                <span class="glyphicon glyphicon-picture"></span>
+            </div>
+            <div class="col-md-10">
+              Pictures
+            </div>
+          </div>
+        </a>
+        <a href="#" class="list-group-item list-group-item-success trigger-show-hide" data-show-hide="storie">
+          <div class="row">
+            <div class="col-md-2">
+              <span class="glyphicon glyphicon-paperclip"></span>
+            </div>
+            <div class="col-md-10">
+              Stories
+            </div>
+          </div>
+        </a>
+        <a href="#" class="list-group-item list-group-item-success trigger-show-hide" data-show-hide="event">
+          <div class="row">
+            <div class="col-md-2">
+              <span class="glyphicon glyphicon-pushpin"></span>
+            </div>
+            <div class="col-md-10">
+              Events
+            </div>
+          </div>
+
+        </a>
       </div>
     </div>
   </div>
+</div>
+{% endblock %}
+
+{% block modals %}
+<!-- create trip modal -->
+<div class="modal fade" id="create_trip" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Prepare your next trip</h4>
+      </div>
+      <div class="modal-body">
+        {{ form_prepare_next_trip.as_ul }}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Kowabounga!</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- add track modal -->
+<div class="modal fade" id="add_track" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Add your last track</h4>
+      </div>
+      <div class="modal-body">
+        MOULE DEFRAICHIE
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Kowabounga!</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block js %}
+
+  $(document).ready(function() {
+
+    maps = [];
+    osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+    osmAttrib = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+
+    $('.map').each(function (){
+      osm = new L.TileLayer(osmUrl, {minZoom: 0, maxZoom: 12, attribution: osmAttrib});
+      map = L.map($(this).attr('id'));
+      map.setView(new L.LatLng(47, 2),6);
+      map.addLayer(osm);
+      maps.push(map)
+    });
+
+    $('.trigger-show-hide').click(function(){
+      $(this).toggleClass('list-group-item-success')
+      show_hide = $(this).attr('data-show-hide').split(' ');
+      $('.'+show_hide.join(' .')).toggle('fast');
+      
+    });
+  });
+  
 {% endblock %}
